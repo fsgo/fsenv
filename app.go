@@ -39,11 +39,25 @@ func NewAppEnv(opt *Value) AppEnv {
 	if root == "" {
 		root = AppRootDir()
 	}
-	env := &appEnv{}
-	env.SetRootDir(root)
-	env.SetDataRootDir(choose(opt.DataDir, filepath.Join(root, "data")))
-	env.SetLogRootDir(choose(opt.LogDir, filepath.Join(root, "log")))
-	env.SetConfRootPath(choose(opt.ConfDir, filepath.Join(root, "conf")))
+	rootEnv := &rootEnv{
+		rootDir: root,
+	}
+
+	env := &appEnv{
+		rootEnv: rootEnv,
+		dataEnv: &dataEnv{
+			rootEnv: rootEnv,
+			dataDir: choose(opt.DataDir, filepath.Join(root, "data")),
+		},
+		logEnv: &logEnv{
+			rootEnv: rootEnv,
+			logDir:  choose(opt.LogDir, filepath.Join(root, "log")),
+		},
+		confEnv: &confEnv{
+			rootEnv: rootEnv,
+			confDir: choose(opt.ConfDir, filepath.Join(root, "conf")),
+		},
+	}
 	return env
 }
 
