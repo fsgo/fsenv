@@ -74,7 +74,7 @@ var _ AppEnv = (*appEnv)(nil)
 
 func setOnce(addr *string, value string, fieldName string) {
 	if *addr != "" {
-		panic(fmt.Sprintf("cannot set %s swice", fieldName))
+		panic(fmt.Sprintf("cannot set %s twice", fieldName))
 	}
 	*addr = value
 	log.Output(2, fmt.Sprintf("[fsenv] set %q=%q\n", fieldName, value))
