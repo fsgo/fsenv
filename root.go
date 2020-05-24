@@ -12,47 +12,47 @@ import (
 	"github.com/fsgo/fsenv/internal/appenv"
 )
 
-// AppRootDir 获取应用根目录
-// 目前是采用向上查找go.mod文件
+// AppRootDir 自动推断、获取应用根目录
+// 目前是采用查找go.mod文件
 // 若查找不到则返回当前目录（pwd）
 func AppRootDir() string {
 	return appenv.AppRoot()
 }
 
-// AppRootEnv 应用更目录环境信息
-type AppRootEnv interface {
+// IAppRootEnv 应用更目录环境信息
+type IAppRootEnv interface {
 	RootDir() string
 	SetRootDir(dir string)
 }
 
 // NewAppRootEnv 创建新的应用更目录环境
-func NewAppRootEnv(root string) AppRootEnv {
+func NewAppRootEnv(root string) IAppRootEnv {
 	if root == "" {
 		root = AppRootDir()
 	}
-	return &rootEnv{
+	return &RootEnv{
 		rootDir: root,
 	}
 }
 
-type rootEnv struct {
+type RootEnv struct {
 	rootDir string
 }
 
-func (r *rootEnv) RootDir() string {
+func (r *RootEnv) RootDir() string {
 	if r.rootDir != "" {
 		return r.rootDir
 	}
 	return AppRootDir()
 }
 
-func (r *rootEnv) SetRootDir(dir string) {
+func (r *RootEnv) SetRootDir(dir string) {
 	setOnce(&r.rootDir, dir, "RootDir")
 }
 
-var _ AppRootEnv = (*rootEnv)(nil)
+var _ IAppRootEnv = (*RootEnv)(nil)
 
-func chooseDirWithRootEnv(dir string, env AppRootEnv, subDirName string) string {
+func chooseDirWithRootEnv(dir string, env IAppRootEnv, subDirName string) string {
 	if dir != "" {
 		return dir
 	}

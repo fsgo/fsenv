@@ -6,30 +6,30 @@
 
 package fsenv
 
-// AppLogEnv 日志目录环境信息
-type AppLogEnv interface {
+// IAppLogEnv 日志目录环境信息
+type IAppLogEnv interface {
 	LogRootDir() string
 	SetLogRootDir(dir string)
 }
 
 // NewAppLogEnv 创建新的日志目录环境信息
-func NewAppLogEnv(dir string) AppLogEnv {
-	return &logEnv{
+func NewAppLogEnv(dir string) IAppLogEnv {
+	return &LogEnv{
 		logDir: dir,
 	}
 }
 
-type logEnv struct {
+type LogEnv struct {
 	logDir  string
-	rootEnv AppRootEnv
+	rootEnv IAppRootEnv
 }
 
-func (l *logEnv) LogRootDir() string {
+func (l *LogEnv) LogRootDir() string {
 	return chooseDirWithRootEnv(l.logDir, l.rootEnv, "log")
 }
 
-func (l *logEnv) SetLogRootDir(dir string) {
+func (l *LogEnv) SetLogRootDir(dir string) {
 	setOnce(&l.logDir, dir, "LogDir")
 }
 
-var _ AppLogEnv = (*logEnv)(nil)
+var _ IAppLogEnv = (*LogEnv)(nil)

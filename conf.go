@@ -6,30 +6,31 @@
 
 package fsenv
 
-// AppConfEnv 配置环境信息
-type AppConfEnv interface {
-	ConfRootPath() string
-	SetConfRootPath(dir string)
+// IAppConfEnv 配置环境信息
+type IAppConfEnv interface {
+	ConfRootDir() string
+	SetConfRootDir(dir string)
 }
 
 // NewAppConfEnv 创建新的配置环境信息
-func NewAppConfEnv(dir string) AppConfEnv {
-	return &confEnv{
+func NewAppConfEnv(dir string) IAppConfEnv {
+	return &ConfEnv{
 		confDir: dir,
 	}
 }
 
-type confEnv struct {
+type ConfEnv struct {
 	confDir string
-	rootEnv AppRootEnv
+	rootEnv IAppRootEnv
 }
 
-func (c *confEnv) ConfRootPath() string {
+func (c *ConfEnv) ConfRootDir() string {
+
 	return chooseDirWithRootEnv(c.confDir, c.rootEnv, "conf")
 }
 
-func (c *confEnv) SetConfRootPath(dir string) {
+func (c *ConfEnv) SetConfRootDir(dir string) {
 	setOnce(&c.confDir, dir, "ConfDir")
 }
 
-var _ AppConfEnv = (*confEnv)(nil)
+var _ IAppConfEnv = (*ConfEnv)(nil)

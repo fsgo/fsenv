@@ -20,40 +20,43 @@ type Value struct {
 	ConfDir string
 }
 
-// AppEnv 应用环境
-type AppEnv interface {
-	AppRootEnv
-	AppDataEnv
-	AppLogEnv
-	AppConfEnv
+// String 序列化，方便查看
+func (v *Value) String() string {
+	format := `{"RootDir":%q,"DataDir":%q,"LogDir":%q,"ConfDir":%q}`
+	return fmt.Sprintf(format, v.RootDir, v.DataDir, v.LogDir, v.ConfDir)
+}
 
-	Value() *Value
+// IAppEnv 应用环境信息完整的接口定义
+type IAppEnv interface {
+	IAppRootEnv
+	IAppDataEnv
+	IAppLogEnv
+	IAppConfEnv
+
+	Value() Value
 }
 
 // NewAppEnv 创建新的应用环境
-func NewAppEnv(opt *Value) AppEnv {
-	if opt == nil {
-		opt = &Value{}
-	}
+func NewAppEnv(opt Value) IAppEnv {
 	root := opt.RootDir
 	if root == "" {
 		root = AppRootDir()
 	}
-	rootEnv := &rootEnv{
+	rootEnv := &RootEnv{
 		rootDir: root,
 	}
 
-	env := &appEnv{
-		rootEnv: rootEnv,
-		dataEnv: &dataEnv{
+	env := &AppEnv{
+		RootEnv: rootEnv,
+		DataEnv: &DataEnv{
 			rootEnv: rootEnv,
 			dataDir: choose(opt.DataDir, filepath.Join(root, "data")),
 		},
-		logEnv: &logEnv{
+		LogEnv: &LogEnv{
 			rootEnv: rootEnv,
 			logDir:  choose(opt.LogDir, filepath.Join(root, "log")),
 		},
-		confEnv: &confEnv{
+		ConfEnv: &ConfEnv{
 			rootEnv: rootEnv,
 			confDir: choose(opt.ConfDir, filepath.Join(root, "conf")),
 		},
@@ -68,23 +71,25 @@ func choose(a, b string) string {
 	return b
 }
 
-type appEnv struct {
-	*rootEnv
-	*dataEnv
-	*logEnv
-	*confEnv
+// AppEnv 默认实现的应用环境信息
+type AppEnv struct {
+	*RootEnv
+	*DataEnv
+	*LogEnv
+	*ConfEnv
 }
 
-func (e *appEnv) Value() *Value {
-	return &Value{
+// Value 获取环境信息所有的值
+func (e *AppEnv) Value() Value {
+	return Value{
 		RootDir: e.RootDir(),
 		DataDir: e.DataRootDir(),
 		LogDir:  e.LogRootDir(),
-		ConfDir: e.ConfRootPath(),
+		ConfDir: e.ConfRootDir(),
 	}
 }
 
-var _ AppEnv = (*appEnv)(nil)
+var _ IAppEnv = (*AppEnv)(nil)
 
 func setOnce(addr *string, value string, fieldName string) {
 	if *addr != "" {

@@ -6,30 +6,30 @@
 
 package fsenv
 
-// AppDataEnv 数据目录环境信息
-type AppDataEnv interface {
+// IAppDataEnv 数据目录环境信息
+type IAppDataEnv interface {
 	DataRootDir() string
 	SetDataRootDir(dir string)
 }
 
 // NewAppDataEnv 创建新的数据目录环境
-func NewAppDataEnv(dir string) AppDataEnv {
-	return &dataEnv{
+func NewAppDataEnv(dir string) IAppDataEnv {
+	return &DataEnv{
 		dataDir: dir,
 	}
 }
 
-type dataEnv struct {
+type DataEnv struct {
 	dataDir string
-	rootEnv AppRootEnv
+	rootEnv IAppRootEnv
 }
 
-func (d *dataEnv) DataRootDir() string {
+func (d *DataEnv) DataRootDir() string {
 	return chooseDirWithRootEnv(d.dataDir, d.rootEnv, "data")
 }
 
-func (d *dataEnv) SetDataRootDir(dir string) {
+func (d *DataEnv) SetDataRootDir(dir string) {
 	setOnce(&d.dataDir, dir, "DataDir")
 }
 
-var _ AppDataEnv = (*dataEnv)(nil)
+var _ IAppDataEnv = (*DataEnv)(nil)

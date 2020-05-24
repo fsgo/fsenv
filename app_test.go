@@ -15,16 +15,19 @@ import (
 
 func TestNewAppEnv(t *testing.T) {
 	wd, _ := os.Getwd()
+	v := Value{}
+	env := NewAppEnv(v)
 
-	env := NewAppEnv(nil)
+	v.LogDir = "不会修改"
+
 	got := env.Value()
-	want := &Value{
+	want := Value{
 		RootDir: wd,
 		DataDir: filepath.Join(wd, "data"),
 		LogDir:  filepath.Join(wd, "log"),
 		ConfDir: filepath.Join(wd, "conf"),
 	}
 	if !reflect.DeepEqual(got, want) {
-		t.Errorf("got=%v, want=%v", got, want)
+		t.Errorf("got=%s,\n want=%s", got, want)
 	}
 }

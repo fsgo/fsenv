@@ -83,7 +83,7 @@ func TestConfRootPath(t *testing.T) {
 			args: args{},
 			call: func() {
 				initDefault()
-				SetConfRootPath("xyz/abc")
+				SetConfRootDir("xyz/abc")
 			},
 			want: "xyz/abc",
 		},
@@ -91,7 +91,7 @@ func TestConfRootPath(t *testing.T) {
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
 			tt.call()
-			got := ConfRootPath()
+			got := ConfRootDir()
 			if got != tt.want {
 				t.Errorf("got=%q, want=%q", got, tt.want)
 			}

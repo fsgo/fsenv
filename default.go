@@ -6,65 +6,65 @@
 
 package fsenv
 
-// Default 默认的环境信息
-var Default AppEnv
+// Default (全局)默认的环境信息
+var Default IAppEnv
 
 func init() {
 	initDefault()
 }
 
 func initDefault() {
-	rootEnv := &rootEnv{}
-	Default = &appEnv{
-		rootEnv: rootEnv,
-		dataEnv: &dataEnv{
+	rootEnv := &RootEnv{}
+	Default = &AppEnv{
+		RootEnv: rootEnv,
+		DataEnv: &DataEnv{
 			rootEnv: rootEnv,
 		},
-		logEnv: &logEnv{
+		LogEnv: &LogEnv{
 			rootEnv: rootEnv,
 		},
-		confEnv: &confEnv{
+		ConfEnv: &ConfEnv{
 			rootEnv: rootEnv,
 		},
 	}
 }
 
-// RootDir 获取应用根目录
+// RootDir (全局)获取应用根目录
 func RootDir() string {
 	return Default.RootDir()
 }
 
-// SetRootDir 设置应用根目录
+// SetRootDir (全局)设置应用根目录
 func SetRootDir(dir string) {
 	Default.SetRootDir(dir)
 }
 
-// DataRootDir 设置应用数据根目录
+// DataRootDir (全局)设置应用数据根目录
 func DataRootDir() string {
 	return Default.DataRootDir()
 }
 
-// SetDataRootDir 获取应用数据根目录
+// SetDataRootDir (全局)获取应用数据根目录
 func SetDataRootDir(dir string) {
 	Default.SetDataRootDir(dir)
 }
 
-// LogRootDir 获取应用日志根目录
+// LogRootDir (全局)获取应用日志根目录
 func LogRootDir() string {
 	return Default.LogRootDir()
 }
 
-// SetLogRootDir 设置应用日志根目录
+// SetLogRootDir (全局)设置应用日志根目录
 func SetLogRootDir(dir string) {
 	Default.SetLogRootDir(dir)
 }
 
-// ConfRootPath 获取应用配置根目录
-func ConfRootPath() string {
-	return Default.ConfRootPath()
+// ConfRootDir (全局)获取应用配置根目录
+func ConfRootDir() string {
+	return Default.ConfRootDir()
 }
 
-// SetConfRootPath 设置应用配置根目录
-func SetConfRootPath(dir string) {
-	Default.SetConfRootPath(dir)
+// SetConfRootDir (全局)设置应用配置根目录
+func SetConfRootDir(dir string) {
+	Default.SetConfRootDir(dir)
 }
