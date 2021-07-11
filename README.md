@@ -1,4 +1,4 @@
-# fsenv
+# 应用程序运行环境信息
 
 应用程序运行环境信息
 
@@ -40,7 +40,19 @@ func ConfRootDir() string
 func SetConfRootDir(dir string)
 
 // NewAppEnv 创建新的应用环境信息
-func NewAppEnv(opt Value) IAppEnv 
+func NewAppEnv(opt Value) AppEnv
+
+// SetIDC (全局) 设置idc
+func SetIDC(idc string) 
+
+// IDC (全局)获取应用的 IDC
+func IDC() string 
+
+// RunMode (全局)获取应用的运行模式
+func RunMode() Mode 
+
+// SetRunMode (全局)设置应用的运行模式
+func SetRunMode(mode Mode)
 ```
 注：为了避免环境信息在运行中修改造成混乱，上述`SetXXX`方法只能调用一次。  
 
@@ -48,9 +60,9 @@ func NewAppEnv(opt Value) IAppEnv
 ## 2.模块使用自己的环境信息
 第三方模块管理自己独特的环境信息，而使用全局的,模块可实现下列接口（或者直接继承使用默认的`ModuleEnv`）：
 ```go
-// IModuleEnv 第三方模块管理环境信息的接口定义
-type IModuleEnv interface {
-	SetEnvOnce(env IAppEnv)
-	Env() IAppEnv
+// WithAppEnv 第三方模块管理环境信息的接口定义
+type WithAppEnv interface {
+	SetEnv(env AppEnv)
+	Env() AppEnv
 }
 ```

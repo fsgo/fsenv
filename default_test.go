@@ -58,19 +58,13 @@ func TestLogRootDir(t *testing.T) {
 }
 
 func TestConfRootPath(t *testing.T) {
-
-	type args struct {
-		dir string
-	}
 	tests := []struct {
 		name string
-		args args
 		call func()
 		want string
 	}{
 		{
 			name: "case 1",
-			args: args{},
 			call: func() {
 				SetRootDir("./internal")
 			},
@@ -78,7 +72,6 @@ func TestConfRootPath(t *testing.T) {
 		},
 		{
 			name: "case 2",
-			args: args{},
 			call: func() {
 				initDefault()
 				SetConfRootDir("xyz/abc")
@@ -101,19 +94,13 @@ func TestConfRootPath(t *testing.T) {
 }
 
 func TestDataRootPath(t *testing.T) {
-
-	type args struct {
-		dir string
-	}
 	tests := []struct {
 		name string
-		args args
 		call func()
 		want string
 	}{
 		{
 			name: "case 1",
-			args: args{},
 			call: func() {
 				SetRootDir("./internal")
 			},
@@ -121,7 +108,6 @@ func TestDataRootPath(t *testing.T) {
 		},
 		{
 			name: "case 2",
-			args: args{},
 			call: func() {
 				initDefault()
 				SetDataRootDir("xyz/abc")

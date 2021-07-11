@@ -5,25 +5,27 @@
 package fsenv
 
 // Default (全局)默认的环境信息
-var Default IAppEnv
+var Default AppEnvRW
 
 func init() {
 	initDefault()
 }
 
 func initDefault() {
-	rootEnv := &RootEnv{}
-	Default = &AppEnv{
-		RootEnv: rootEnv,
-		DataEnv: &DataEnv{
-			rootEnv: rootEnv,
+	envRoot := &rootEnv{}
+	Default = &appEnv{
+		AppRootEnv: envRoot,
+		AppDataEnv: &dataEnv{
+			rootEnv: envRoot,
 		},
-		LogEnv: &LogEnv{
-			rootEnv: rootEnv,
+		AppLogEnv: &logEnv{
+			rootEnv: envRoot,
 		},
-		ConfEnv: &ConfEnv{
-			rootEnv: rootEnv,
+		AppConfEnv: &confEnv{
+			rootEnv: envRoot,
 		},
+		AppIDCEnv:  &idcEnv{},
+		AppRunMode: &runModeEnv{},
 	}
 }
 
@@ -65,4 +67,24 @@ func ConfRootDir() string {
 // SetConfRootDir (全局)设置应用配置根目录
 func SetConfRootDir(dir string) {
 	Default.SetConfRootDir(dir)
+}
+
+// SetIDC (全局) 设置idc
+func SetIDC(idc string) {
+	Default.SetIDC(idc)
+}
+
+// IDC (全局)获取应用的 IDC
+func IDC() string {
+	return Default.IDC()
+}
+
+// RunMode (全局)获取应用的运行模式
+func RunMode() Mode {
+	return Default.RunMode()
+}
+
+// SetRunMode (全局)设置应用的运行模式
+func SetRunMode(mode Mode) {
+	Default.SetRunMode(mode)
 }

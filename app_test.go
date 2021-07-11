@@ -24,6 +24,8 @@ func TestNewAppEnv(t *testing.T) {
 		DataDir: filepath.Join(wd, "data"),
 		LogDir:  filepath.Join(wd, "log"),
 		ConfDir: filepath.Join(wd, "conf"),
+		IDC:     "test",
+		RunMode: ModeProduct,
 	}
 	if !reflect.DeepEqual(got, want) {
 		t.Errorf("got=%s,\n want=%s", got, want)

@@ -17,40 +17,40 @@ func AppRootDir() string {
 	return appenv.AppRoot()
 }
 
-// IAppRootEnv 应用更目录环境信息
-type IAppRootEnv interface {
+// AppRootEnv 应用更目录环境信息
+type AppRootEnv interface {
 	RootDir() string
 	SetRootDir(dir string)
 }
 
 // NewAppRootEnv 创建新的应用更目录环境
-func NewAppRootEnv(root string) IAppRootEnv {
-	if root == "" {
+func NewAppRootEnv(root string) AppRootEnv {
+	if root == "" || root == "auto" {
 		root = AppRootDir()
 	}
-	return &RootEnv{
+	return &rootEnv{
 		rootDir: root,
 	}
 }
 
-type RootEnv struct {
+type rootEnv struct {
 	rootDir string
 }
 
-func (r *RootEnv) RootDir() string {
+func (r *rootEnv) RootDir() string {
 	if r.rootDir != "" {
 		return r.rootDir
 	}
 	return AppRootDir()
 }
 
-func (r *RootEnv) SetRootDir(dir string) {
+func (r *rootEnv) SetRootDir(dir string) {
 	setOnce(&r.rootDir, dir, "RootDir")
 }
 
-var _ IAppRootEnv = (*RootEnv)(nil)
+var _ AppRootEnv = (*rootEnv)(nil)
 
-func chooseDirWithRootEnv(dir string, env IAppRootEnv, subDirName string) string {
+func chooseDirWithRootEnv(dir string, env AppRootEnv, subDirName string) string {
 	if dir != "" {
 		return dir
 	}
