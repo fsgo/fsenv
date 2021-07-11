@@ -62,7 +62,7 @@ func SetRunMode(mode Mode)
 ```go
 // WithAppEnv 第三方模块管理环境信息的接口定义
 type WithAppEnv interface {
-	SetEnv(env AppEnv)
-	Env() AppEnv
+	SetAppEnv(env AppEnv)
+	AppEnv() AppEnv
 }
 ```

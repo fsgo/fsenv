@@ -8,12 +8,6 @@ import (
 	"sync"
 )
 
-// WithAppEnv 第三方模块管理环境信息的接口定义
-type WithAppEnv interface {
-	CanSetAppEnv
-	HasAppEnv
-}
-
 // CanSetAppEnv 允许设置 app 的 env
 type CanSetAppEnv interface {
 	SetAppEnv(env AppEnv)
@@ -24,14 +18,14 @@ type HasAppEnv interface {
 	AppEnv() AppEnv
 }
 
-// withAppEnv 用于第三方模块管理环境信息
-type withAppEnv struct {
+// WithAppEnv 用于第三方模块管理环境信息
+type WithAppEnv struct {
 	moduleEnv AppEnv
 	mux       sync.RWMutex
 }
 
 // AppEnv 获取环境信息
-func (m *withAppEnv) AppEnv() AppEnv {
+func (m *WithAppEnv) AppEnv() AppEnv {
 	m.mux.RLock()
 	defer m.mux.RUnlock()
 
@@ -42,7 +36,7 @@ func (m *withAppEnv) AppEnv() AppEnv {
 }
 
 // SetAppEnv 设置自定义的环境信息，只允许设置一次
-func (m *withAppEnv) SetAppEnv(env AppEnv) {
+func (m *WithAppEnv) SetAppEnv(env AppEnv) {
 	m.mux.Lock()
 	defer m.mux.Unlock()
 
@@ -52,4 +46,5 @@ func (m *withAppEnv) SetAppEnv(env AppEnv) {
 	m.moduleEnv = env
 }
 
-var _ WithAppEnv = (*withAppEnv)(nil)
+var _ CanSetAppEnv = (*WithAppEnv)(nil)
+var _ HasAppEnv = (*WithAppEnv)(nil)
