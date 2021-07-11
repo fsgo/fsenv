@@ -6,7 +6,17 @@ package fsenv
 
 // AppLogEnv 日志目录环境信息
 type AppLogEnv interface {
+	HasLogRootDir
+	CanSetLogRootDir
+}
+
+// HasLogRootDir 可以获取日志根目录
+type HasLogRootDir interface {
 	LogRootDir() string
+}
+
+// CanSetLogRootDir 可以设置日志根目录
+type CanSetLogRootDir interface {
 	SetLogRootDir(dir string)
 }
 

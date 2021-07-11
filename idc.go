@@ -6,7 +6,17 @@ package fsenv
 
 // AppIDCEnv 机房信息
 type AppIDCEnv interface {
+	HasIDC
+	CanSetIDC
+}
+
+// HasIDC 可以获取 idc
+type HasIDC interface {
 	IDC() string
+}
+
+// CanSetIDC 运行设置 idc
+type CanSetIDC interface {
 	SetIDC(idc string)
 }
 

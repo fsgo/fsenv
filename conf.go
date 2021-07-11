@@ -6,7 +6,17 @@ package fsenv
 
 // AppConfEnv 配置环境信息
 type AppConfEnv interface {
+	HasConfRootDir
+	CanSetConfRootDir
+}
+
+// HasConfRootDir 可以获取配置目录
+type HasConfRootDir interface {
 	ConfRootDir() string
+}
+
+// CanSetConfRootDir 运行设置配置目录
+type CanSetConfRootDir interface {
 	SetConfRootDir(dir string)
 }
 

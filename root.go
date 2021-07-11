@@ -19,7 +19,17 @@ func AppRootDir() string {
 
 // AppRootEnv 应用更目录环境信息
 type AppRootEnv interface {
+	HasRootDir
+	CanSetRootDir
+}
+
+// HasRootDir 可以获取根目录
+type HasRootDir interface {
 	RootDir() string
+}
+
+// CanSetRootDir 可以设置根目录
+type CanSetRootDir interface {
 	SetRootDir(dir string)
 }
 

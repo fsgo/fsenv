@@ -22,7 +22,17 @@ const (
 
 // AppRunMode 机房信息
 type AppRunMode interface {
+	HasRunMode
+	CanSetRunMode
+}
+
+// HasRunMode 可以获取 runMode
+type HasRunMode interface {
 	RunMode() Mode
+}
+
+// CanSetRunMode 允许设置 runMode
+type CanSetRunMode interface {
 	SetRunMode(mode Mode)
 }
 

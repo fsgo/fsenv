@@ -6,7 +6,17 @@ package fsenv
 
 // AppDataEnv 数据目录环境信息
 type AppDataEnv interface {
+	HasDataRootDir
+	CanSetDataRootDir
+}
+
+// HasDataRootDir 可以获取数据目录
+type HasDataRootDir interface {
 	DataRootDir() string
+}
+
+// CanSetDataRootDir 允许设置数据目录
+type CanSetDataRootDir interface {
 	SetDataRootDir(dir string)
 }
 
