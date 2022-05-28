@@ -37,6 +37,8 @@ func TestParserEnvFile(t *testing.T) {
 				"k8":  "",
 				"k9":  "",
 				"k10": " ",
+				"k11": "a=11",
+				"k12": "12#2",
 			},
 			wantErr: false,
 		},
