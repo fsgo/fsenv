@@ -33,7 +33,7 @@ type confEnv struct {
 }
 
 func (c *confEnv) ConfRootDir() string {
-	return chooseDirWithRootEnv(c.confDir, c.rootEnv, "conf")
+	return chooseDirWithRootEnv(c.confDir, c.rootEnv, eKeyConf, "conf")
 }
 
 func (c *confEnv) SetConfRootDir(dir string) {

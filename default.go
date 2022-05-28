@@ -30,6 +30,8 @@ func initDefault() {
 }
 
 // RootDir (全局)获取应用根目录
+// 	若没有设置值，会尝试从环境变量 fsenv.root 读取值
+// 	默认值 go.mod 所在目录 或者 pwd
 func RootDir() string {
 	return Default.RootDir()
 }
@@ -40,6 +42,8 @@ func SetRootDir(dir string) {
 }
 
 // DataRootDir (全局)设置应用数据根目录
+// 	若没有设置值，会尝试从环境变量 fsenv.data 读取值
+// 	默认值 RootDir()/data
 func DataRootDir() string {
 	return Default.DataRootDir()
 }
@@ -50,6 +54,8 @@ func SetDataRootDir(dir string) {
 }
 
 // LogRootDir (全局)获取应用日志根目录
+// 	若没有设置值，会尝试从环境变量 fsenv.root 读取值
+// 	默认值 RootDir()/log
 func LogRootDir() string {
 	return Default.LogRootDir()
 }
@@ -60,6 +66,8 @@ func SetLogRootDir(dir string) {
 }
 
 // ConfRootDir (全局)获取应用配置根目录
+// 	若没有设置值，会尝试从环境变量 fsenv.conf 读取值
+// 	默认值 RootDir()/conf
 func ConfRootDir() string {
 	return Default.ConfRootDir()
 }
@@ -75,11 +83,15 @@ func SetIDC(idc string) {
 }
 
 // IDC (全局)获取应用的 IDC
+// 	若没有设置值，会尝试从环境变量 fsenv.idc 读取值
+// 	默认值为 test
 func IDC() string {
 	return Default.IDC()
 }
 
 // RunMode (全局)获取应用的运行模式
+// 	若没有设置值，会尝试从环境变量 fsenv.mode 读取值
+// 	默认值为 product
 func RunMode() Mode {
 	return Default.RunMode()
 }

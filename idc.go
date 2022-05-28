@@ -32,10 +32,10 @@ type idcEnv struct {
 }
 
 func (c *idcEnv) IDC() string {
-	if c.idc != "" {
+	if len(c.idc) > 0 {
 		return c.idc
 	}
-	return "test"
+	return osEnvDefault(eKeyIDC, "test")
 }
 
 func (c *idcEnv) SetIDC(idc string) {

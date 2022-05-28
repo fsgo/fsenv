@@ -6,6 +6,7 @@ package fsenv
 
 import (
 	"log"
+	"os"
 	"sync"
 )
 
@@ -52,8 +53,11 @@ func (c *runModeEnv) RunMode() Mode {
 	c.mux.RLock()
 	defer c.mux.RUnlock()
 
-	if c.mode != "" {
+	if len(c.mode) > 0 {
 		return c.mode
+	}
+	if val := os.Getenv(eKeyMode); len(val) > 0 {
+		return Mode(val)
 	}
 	return ModeProduct
 }
@@ -62,7 +66,7 @@ func (c *runModeEnv) SetRunMode(mode Mode) {
 	c.mux.Lock()
 	c.mode = mode
 	c.mux.Unlock()
-	// 这个比较特殊，运行在运行期间动态调整
+	// 这个比较特殊，允许在运行期间动态调整
 
 	log.Printf("[fsenv] set RunMode=%q\n", mode)
 }

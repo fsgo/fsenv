@@ -5,16 +5,23 @@
 package fsenv
 
 import (
+	"os"
 	"path/filepath"
 
 	"github.com/fsgo/fsenv/internal/appenv"
 )
 
 // AppRootDir 自动推断、获取应用根目录
-// 目前是采用查找go.mod文件
-// 若查找不到则返回当前目录（pwd）
+//  推断顺序：
+// 	1. 环境变量：fsenv.root
+// 	2. 查找 go.mod 文件
+// 	3. 当前目录（pwd）
 func AppRootDir() string {
-	return appenv.AppRoot()
+	def := os.Getenv(eKeyRoot)
+	if len(def) == 0 {
+		return appenv.AppRoot()
+	}
+	return def
 }
 
 // AppRootEnv 应用更目录环境信息
@@ -35,9 +42,6 @@ type CanSetRootDir interface {
 
 // NewAppRootEnv 创建新的应用更目录环境
 func NewAppRootEnv(root string) AppRootEnv {
-	if root == "" || root == "auto" {
-		root = AppRootDir()
-	}
 	return &rootEnv{
 		rootDir: root,
 	}
@@ -48,7 +52,7 @@ type rootEnv struct {
 }
 
 func (r *rootEnv) RootDir() string {
-	if r.rootDir != "" {
+	if len(r.rootDir) > 0 {
 		return r.rootDir
 	}
 	return AppRootDir()
@@ -60,9 +64,13 @@ func (r *rootEnv) SetRootDir(dir string) {
 
 var _ AppRootEnv = (*rootEnv)(nil)
 
-func chooseDirWithRootEnv(dir string, env AppRootEnv, subDirName string) string {
-	if dir != "" {
+func chooseDirWithRootEnv(dir string, env HasRootDir, key string, subDirName string) string {
+	if len(dir) > 0 {
 		return dir
+	}
+	// 当没有明确设置的时候，第 2 优先级为环境变量的值
+	if val := os.Getenv(key); len(val) > 0 {
+		return val
 	}
 	if env == nil {
 		return filepath.Join(AppRootDir(), subDirName)

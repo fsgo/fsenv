@@ -33,7 +33,7 @@ type dataEnv struct {
 }
 
 func (d *dataEnv) DataRootDir() string {
-	return chooseDirWithRootEnv(d.dataDir, d.rootEnv, "data")
+	return chooseDirWithRootEnv(d.dataDir, d.rootEnv, eKeyData, "data")
 }
 
 func (d *dataEnv) SetDataRootDir(dir string) {

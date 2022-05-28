@@ -5,6 +5,7 @@
 package fsenv
 
 import (
+	"encoding/json"
 	"fmt"
 	"log"
 	"path/filepath"
@@ -22,8 +23,8 @@ type Value struct {
 
 // String 序列化，方便查看
 func (v *Value) String() string {
-	format := `{"RootDir":%q,"DataDir":%q,"LogDir":%q,"ConfDir":%q}`
-	return fmt.Sprintf(format, v.RootDir, v.DataDir, v.LogDir, v.ConfDir)
+	bf, _ := json.Marshal(v)
+	return string(bf)
 }
 
 // AppEnv 应用环境信息完整的接口定义
@@ -119,7 +120,7 @@ func (e *appEnv) Value() Value {
 var _ AppEnv = (*appEnv)(nil)
 
 func setOnce(addr *string, value string, fieldName string) {
-	if *addr != "" {
+	if len(*addr) > 0 {
 		panic(fmt.Sprintf("cannot set %s twice", fieldName))
 	}
 	*addr = value

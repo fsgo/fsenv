@@ -33,7 +33,7 @@ type logEnv struct {
 }
 
 func (l *logEnv) LogRootDir() string {
-	return chooseDirWithRootEnv(l.logDir, l.rootEnv, "log")
+	return chooseDirWithRootEnv(l.logDir, l.rootEnv, eKeyLog, "log")
 }
 
 func (l *logEnv) SetLogRootDir(dir string) {

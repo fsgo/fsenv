@@ -8,53 +8,40 @@ import (
 	"os"
 	"path/filepath"
 	"testing"
+
+	"github.com/stretchr/testify/require"
 )
 
 func TestRootDir(t *testing.T) {
 	wd, err := os.Getwd()
-	if err != nil {
-		t.Fatalf("os.Getwd() error:%v", err.Error())
-	}
+	require.NoError(t, err)
+	require.Equal(t, wd, RootDir())
 
-	tests := []struct {
-		name string
-		want string
-	}{
-		{
-			name: "case 1",
-			want: wd,
-		},
-	}
-	for _, tt := range tests {
-		t.Run(tt.name, func(t *testing.T) {
-			if got := RootDir(); got != tt.want {
-				t.Errorf("RootDir() = %v, want %v", got, tt.want)
-			}
-		})
-	}
+	require.NoError(t, os.Setenv(eKeyRoot, "test"))
+	defer func() {
+		require.NoError(t, os.Unsetenv(eKeyRoot))
+		initDefault()
+	}()
+
+	require.Equal(t, "test", RootDir())
+	SetRootDir("root_dir")
+	require.Equal(t, "root_dir", RootDir())
 }
 
 func TestLogRootDir(t *testing.T) {
 	wd, err := os.Getwd()
-	if err != nil {
-		t.Fatalf("os.Getwd() error:%v", err.Error())
-	}
-	tests := []struct {
-		name string
-		want string
-	}{
-		{
-			name: "case 1",
-			want: filepath.Join(wd, "log"),
-		},
-	}
-	for _, tt := range tests {
-		t.Run(tt.name, func(t *testing.T) {
-			if got := LogRootDir(); got != tt.want {
-				t.Errorf("LogRootDir() = %v, want %v", got, tt.want)
-			}
-		})
-	}
+	require.NoError(t, err)
+	require.Equal(t, filepath.Join(wd, "log"), LogRootDir())
+
+	require.NoError(t, os.Setenv(eKeyLog, "test"))
+	defer func() {
+		require.NoError(t, os.Unsetenv(eKeyLog))
+		initDefault()
+	}()
+	require.Equal(t, "test", LogRootDir())
+
+	SetLogRootDir("log_dir")
+	require.Equal(t, "log_dir", LogRootDir())
 }
 
 func TestConfRootPath(t *testing.T) {
@@ -83,9 +70,7 @@ func TestConfRootPath(t *testing.T) {
 		t.Run(tt.name, func(t *testing.T) {
 			tt.call()
 			got := ConfRootDir()
-			if got != tt.want {
-				t.Errorf("got=%q, want=%q", got, tt.want)
-			}
+			require.Equal(t, tt.want, got)
 		})
 	}
 
@@ -119,12 +104,35 @@ func TestDataRootPath(t *testing.T) {
 		t.Run(tt.name, func(t *testing.T) {
 			tt.call()
 			got := DataRootDir()
-			if got != tt.want {
-				t.Errorf("got=%q, want=%q", got, tt.want)
-			}
+			require.Equal(t, tt.want, got)
 		})
 	}
 
 	// 恢复初始化的环境
 	initDefault()
+}
+
+func TestIDC(t *testing.T) {
+	require.Equal(t, "test", IDC())
+	require.NoError(t, os.Setenv(eKeyIDC, "gz"))
+	defer func() {
+		require.NoError(t, os.Unsetenv(eKeyIDC))
+		initDefault()
+	}()
+	require.Equal(t, "gz", IDC())
+
+	SetIDC("jx")
+	require.Equal(t, "jx", IDC())
+}
+
+func TestRunMod(t *testing.T) {
+	require.Equal(t, ModeProduct, RunMode())
+	require.NoError(t, os.Setenv(eKeyMode, "dev"))
+	defer func() {
+		require.NoError(t, os.Unsetenv(eKeyMode))
+		initDefault()
+	}()
+	require.Equal(t, Mode("dev"), RunMode())
+	SetRunMode(ModeDebug)
+	require.Equal(t, ModeDebug, RunMode())
 }

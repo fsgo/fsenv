@@ -7,8 +7,9 @@ package fsenv
 import (
 	"os"
 	"path/filepath"
-	"reflect"
 	"testing"
+
+	"github.com/stretchr/testify/require"
 )
 
 func TestNewAppEnv(t *testing.T) {
@@ -27,7 +28,6 @@ func TestNewAppEnv(t *testing.T) {
 		IDC:     "test",
 		RunMode: ModeProduct,
 	}
-	if !reflect.DeepEqual(got, want) {
-		t.Errorf("got=%s,\n want=%s", got, want)
-	}
+	require.Equal(t, want, got)
+	require.NotEmpty(t, got.String())
 }
