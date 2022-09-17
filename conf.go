@@ -28,8 +28,8 @@ func NewAppConfEnv(dir string) AppConfEnv {
 }
 
 type confEnv struct {
-	confDir string
 	rootEnv AppRootEnv
+	confDir string
 }
 
 func (c *confEnv) ConfRootDir() string {

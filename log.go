@@ -28,8 +28,8 @@ func NewAppLogEnv(dir string) AppLogEnv {
 }
 
 type logEnv struct {
-	logDir  string
 	rootEnv AppRootEnv
+	logDir  string
 }
 
 func (l *logEnv) LogRootDir() string {

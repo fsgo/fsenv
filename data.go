@@ -28,8 +28,8 @@ func NewAppDataEnv(dir string) AppDataEnv {
 }
 
 type dataEnv struct {
-	dataDir string
 	rootEnv AppRootEnv
+	dataDir string
 }
 
 func (d *dataEnv) DataRootDir() string {
