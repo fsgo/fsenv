@@ -12,10 +12,11 @@ import (
 )
 
 // AppRootDir 自动推断、获取应用根目录
-//  推断顺序：
-// 	1. 环境变量：fsenv.root
-// 	2. 查找 go.mod 文件
-// 	3. 当前目录（pwd）
+//
+//	 推断顺序：
+//		1. 环境变量：fsenv.root
+//		2. 查找 go.mod 文件
+//		3. 当前目录（pwd）
 func AppRootDir() string {
 	def := os.Getenv(eKeyRoot)
 	if len(def) == 0 {
