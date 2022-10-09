@@ -53,7 +53,7 @@ type AppEnvRW interface {
 // NewAppEnv 创建新的应用环境
 func NewAppEnv(opt Value) AppEnv {
 	root := opt.RootDir
-	if root == "" {
+	if len(root) == 0 {
 		root = AppRootDir()
 	}
 	envRoot := &rootEnv{
@@ -61,7 +61,7 @@ func NewAppEnv(opt Value) AppEnv {
 	}
 
 	mode := ModeProduct
-	if opt.RunMode != "" {
+	if len(opt.RunMode) != 0 {
 		mode = opt.RunMode
 	}
 	env := &appEnv{
@@ -89,7 +89,7 @@ func NewAppEnv(opt Value) AppEnv {
 }
 
 func choose(a, b string) string {
-	if a != "" {
+	if len(a) != 0 {
 		return a
 	}
 	return b
