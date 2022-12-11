@@ -5,7 +5,7 @@
 package appenv
 
 import (
-	"fmt"
+	"errors"
 	"os"
 	"path/filepath"
 )
@@ -26,7 +26,7 @@ func AppRoot() string {
 	return wd
 }
 
-var errNotFound = fmt.Errorf("cannot found")
+var errNotFound = errors.New("cannot found")
 
 func findDirMatch(baseDir string, fileNames []string) (dir string, err error) {
 	currentDir := baseDir

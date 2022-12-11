@@ -80,7 +80,7 @@ func parserEnvValue(value string) string {
 		return value
 	}
 	for _, s := range []string{`"`, `'`, "`"} {
-		if strings.HasPrefix(value, s) && strings.HasPrefix(value, s) {
+		if strings.HasPrefix(value, s) && strings.HasSuffix(value, s) {
 			return value[1 : len(value)-1]
 		}
 	}

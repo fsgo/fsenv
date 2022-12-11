@@ -9,12 +9,12 @@ import (
 )
 
 const (
-	eKeyIDC  = "fsenv.idc"
-	eKeyConf = "fsenv.conf"
-	eKeyRoot = "fsenv.root"
-	eKeyData = "fsenv.data"
-	eKeyLog  = "fsenv.log"
-	eKeyMode = "fsenv.mode"
+	eKeyIDC  = "fsenv_idc"
+	eKeyConf = "fsenv_conf"
+	eKeyRoot = "fsenv_root"
+	eKeyData = "fsenv_data"
+	eKeyLog  = "fsenv_log"
+	eKeyMode = "fsenv_mode"
 )
 
 func osEnvDefault(key string, def string) string {

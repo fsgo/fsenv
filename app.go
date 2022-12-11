@@ -7,7 +7,6 @@ package fsenv
 import (
 	"encoding/json"
 	"fmt"
-	"log"
 	"path/filepath"
 )
 
@@ -81,9 +80,7 @@ func NewAppEnv(opt Value) AppEnv {
 		AppIDCEnv: &idcEnv{
 			idc: choose(opt.IDC, "test"),
 		},
-		AppRunMode: &runModeEnv{
-			mode: mode,
-		},
+		AppRunMode: NewAppRunModeEnv(mode),
 	}
 	return env
 }
@@ -124,5 +121,4 @@ func setOnce(addr *string, value string, fieldName string) {
 		panic(fmt.Sprintf("cannot set %s twice", fieldName))
 	}
 	*addr = value
-	_ = log.Output(2, fmt.Sprintf("[fsenv] set %q=%q\n", fieldName, value))
 }

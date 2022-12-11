@@ -12,7 +12,7 @@ import (
 )
 
 func Test_osEnvDefault(t *testing.T) {
-	key := "fsenv.k1"
+	key := "fsenv_k1"
 	require.NoError(t, os.Unsetenv(key))
 	defer require.NoError(t, os.Unsetenv(key))
 

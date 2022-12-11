@@ -5,9 +5,8 @@
 package fsenv
 
 import (
-	"log"
 	"os"
-	"sync"
+	"sync/atomic"
 )
 
 // Mode 运行模式
@@ -39,22 +38,19 @@ type CanSetRunMode interface {
 
 // NewAppRunModeEnv 创建新的配置环境信息
 func NewAppRunModeEnv(mode Mode) AppRunMode {
-	return &runModeEnv{
-		mode: mode,
-	}
+	ae := &runModeEnv{}
+	ae.SetRunMode(mode)
+	return ae
 }
 
 type runModeEnv struct {
-	mode Mode
-	mux  sync.RWMutex
+	mode atomic.Value
 }
 
 func (c *runModeEnv) RunMode() Mode {
-	c.mux.RLock()
-	defer c.mux.RUnlock()
-
-	if len(c.mode) > 0 {
-		return c.mode
+	vs, _ := c.mode.Load().(Mode)
+	if len(vs) > 0 {
+		return vs
 	}
 	if val := os.Getenv(eKeyMode); len(val) > 0 {
 		return Mode(val)
@@ -63,12 +59,7 @@ func (c *runModeEnv) RunMode() Mode {
 }
 
 func (c *runModeEnv) SetRunMode(mode Mode) {
-	c.mux.Lock()
-	c.mode = mode
-	c.mux.Unlock()
-	// 这个比较特殊，允许在运行期间动态调整
-
-	log.Printf("[fsenv] set RunMode=%q\n", mode)
+	c.mode.Store(mode)
 }
 
 var _ AppRunMode = (*runModeEnv)(nil)
