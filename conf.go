@@ -37,7 +37,7 @@ func (c *confEnv) ConfRootDir() string {
 }
 
 func (c *confEnv) SetConfRootDir(dir string) {
-	setOnce(&c.confDir, dir, "ConfDir")
+	setValue(&c.confDir, dir, "ConfDir")
 }
 
 var _ AppConfEnv = (*confEnv)(nil)

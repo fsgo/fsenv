@@ -37,7 +37,7 @@ func (l *logEnv) LogRootDir() string {
 }
 
 func (l *logEnv) SetLogRootDir(dir string) {
-	setOnce(&l.logDir, dir, "LogDir")
+	setValue(&l.logDir, dir, "LogDir")
 }
 
 var _ AppLogEnv = (*logEnv)(nil)

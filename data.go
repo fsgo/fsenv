@@ -37,7 +37,7 @@ func (d *dataEnv) DataRootDir() string {
 }
 
 func (d *dataEnv) SetDataRootDir(dir string) {
-	setOnce(&d.dataDir, dir, "DataDir")
+	setValue(&d.dataDir, dir, "DataDir")
 }
 
 var _ AppDataEnv = (*dataEnv)(nil)

@@ -60,17 +60,17 @@ func (r *rootEnv) RootDir() string {
 }
 
 func (r *rootEnv) SetRootDir(dir string) {
-	setOnce(&r.rootDir, dir, "RootDir")
+	setValue(&r.rootDir, dir, "RootDir")
 }
 
 var _ AppRootEnv = (*rootEnv)(nil)
 
-func chooseDirWithRootEnv(dir string, env HasRootDir, key string, subDirName string) string {
+func chooseDirWithRootEnv(dir string, env HasRootDir, envKey string, subDirName string) string {
 	if len(dir) > 0 {
 		return dir
 	}
 	// 当没有明确设置的时候，第 2 优先级为环境变量的值
-	if val := os.Getenv(key); len(val) > 0 {
+	if val := os.Getenv(envKey); len(val) > 0 {
 		return val
 	}
 	if env == nil {

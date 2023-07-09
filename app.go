@@ -6,7 +6,6 @@ package fsenv
 
 import (
 	"encoding/json"
-	"fmt"
 	"path/filepath"
 )
 
@@ -116,9 +115,6 @@ func (e *appEnv) Value() Value {
 
 var _ AppEnv = (*appEnv)(nil)
 
-func setOnce(addr *string, value string, fieldName string) {
-	if len(*addr) > 0 {
-		panic(fmt.Sprintf("cannot set %s twice", fieldName))
-	}
+func setValue(addr *string, value string, fieldName string) {
 	*addr = value
 }

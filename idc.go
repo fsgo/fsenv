@@ -39,7 +39,7 @@ func (c *idcEnv) IDC() string {
 }
 
 func (c *idcEnv) SetIDC(idc string) {
-	setOnce(&c.idc, idc, "IDC")
+	setValue(&c.idc, idc, "IDC")
 }
 
 var _ AppIDCEnv = (*idcEnv)(nil)
