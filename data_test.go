@@ -8,16 +8,16 @@ import (
 	"os"
 	"testing"
 
-	"github.com/stretchr/testify/require"
+	"github.com/fsgo/fst"
 )
 
 func TestAppDataEnv(t *testing.T) {
 	t.Run("init with value", func(t *testing.T) {
 		e1 := NewAppDataEnv("demo")
-		require.Equal(t, "demo", e1.DataRootDir())
+		fst.Equal(t, "demo", e1.DataRootDir())
 		t.Run("twice", func(t *testing.T) {
 			defer func() {
-				require.NotNil(t, recover())
+				fst.Nil(t, recover())
 			}()
 			e1.SetDataRootDir("test")
 		})
@@ -25,12 +25,12 @@ func TestAppDataEnv(t *testing.T) {
 
 	t.Run("init with empty", func(t *testing.T) {
 		e1 := NewAppDataEnv("")
-		require.NoError(t, os.Setenv(eKeyData, "test"))
+		fst.NoError(t, os.Setenv(eKeyData, "test"))
 		defer func() {
-			require.NoError(t, os.Unsetenv(eKeyData))
+			fst.NoError(t, os.Unsetenv(eKeyData))
 		}()
-		require.Equal(t, "test", e1.DataRootDir())
+		fst.Equal(t, "test", e1.DataRootDir())
 		e1.SetDataRootDir("v2")
-		require.Equal(t, "v2", e1.DataRootDir())
+		fst.Equal(t, "v2", e1.DataRootDir())
 	})
 }

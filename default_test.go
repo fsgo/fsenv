@@ -9,39 +9,39 @@ import (
 	"path/filepath"
 	"testing"
 
-	"github.com/stretchr/testify/require"
+	"github.com/fsgo/fst"
 )
 
 func TestRootDir(t *testing.T) {
 	wd, err := os.Getwd()
-	require.NoError(t, err)
-	require.Equal(t, wd, RootDir())
+	fst.NoError(t, err)
+	fst.Equal(t, wd, RootDir())
 
-	require.NoError(t, os.Setenv(eKeyRoot, "test"))
+	fst.NoError(t, os.Setenv(eKeyRoot, "test"))
 	defer func() {
-		require.NoError(t, os.Unsetenv(eKeyRoot))
+		fst.NoError(t, os.Unsetenv(eKeyRoot))
 		initDefault()
 	}()
 
-	require.Equal(t, "test", RootDir())
+	fst.Equal(t, "test", RootDir())
 	SetRootDir("root_dir")
-	require.Equal(t, "root_dir", RootDir())
+	fst.Equal(t, "root_dir", RootDir())
 }
 
 func TestLogRootDir(t *testing.T) {
 	wd, err := os.Getwd()
-	require.NoError(t, err)
-	require.Equal(t, filepath.Join(wd, "log"), LogRootDir())
+	fst.NoError(t, err)
+	fst.Equal(t, filepath.Join(wd, "log"), LogRootDir())
 
-	require.NoError(t, os.Setenv(eKeyLog, "test"))
+	fst.NoError(t, os.Setenv(eKeyLog, "test"))
 	defer func() {
-		require.NoError(t, os.Unsetenv(eKeyLog))
+		fst.NoError(t, os.Unsetenv(eKeyLog))
 		initDefault()
 	}()
-	require.Equal(t, "test", LogRootDir())
+	fst.Equal(t, "test", LogRootDir())
 
 	SetLogRootDir("log_dir")
-	require.Equal(t, "log_dir", LogRootDir())
+	fst.Equal(t, "log_dir", LogRootDir())
 }
 
 func TestConfRootPath(t *testing.T) {
@@ -70,7 +70,7 @@ func TestConfRootPath(t *testing.T) {
 		t.Run(tt.name, func(t *testing.T) {
 			tt.call()
 			got := ConfRootDir()
-			require.Equal(t, tt.want, got)
+			fst.Equal(t, tt.want, got)
 		})
 	}
 
@@ -104,7 +104,7 @@ func TestDataRootPath(t *testing.T) {
 		t.Run(tt.name, func(t *testing.T) {
 			tt.call()
 			got := DataRootDir()
-			require.Equal(t, tt.want, got)
+			fst.Equal(t, tt.want, got)
 		})
 	}
 
@@ -113,26 +113,26 @@ func TestDataRootPath(t *testing.T) {
 }
 
 func TestIDC(t *testing.T) {
-	require.Equal(t, "test", IDC())
-	require.NoError(t, os.Setenv(eKeyIDC, "gz"))
+	fst.Equal(t, "test", IDC())
+	fst.NoError(t, os.Setenv(eKeyIDC, "gz"))
 	defer func() {
-		require.NoError(t, os.Unsetenv(eKeyIDC))
+		fst.NoError(t, os.Unsetenv(eKeyIDC))
 		initDefault()
 	}()
-	require.Equal(t, "gz", IDC())
+	fst.Equal(t, "gz", IDC())
 
 	SetIDC("jx")
-	require.Equal(t, "jx", IDC())
+	fst.Equal(t, "jx", IDC())
 }
 
 func TestRunMod(t *testing.T) {
-	require.Equal(t, ModeProduct, RunMode())
-	require.NoError(t, os.Setenv(eKeyMode, "dev"))
+	fst.Equal(t, ModeProduct, RunMode())
+	fst.NoError(t, os.Setenv(eKeyMode, "dev"))
 	defer func() {
-		require.NoError(t, os.Unsetenv(eKeyMode))
+		fst.NoError(t, os.Unsetenv(eKeyMode))
 		initDefault()
 	}()
-	require.Equal(t, Mode("dev"), RunMode())
+	fst.Equal(t, Mode("dev"), RunMode())
 	SetRunMode(ModeDebug)
-	require.Equal(t, ModeDebug, RunMode())
+	fst.Equal(t, ModeDebug, RunMode())
 }

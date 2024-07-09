@@ -9,7 +9,7 @@ import (
 	"path/filepath"
 	"testing"
 
-	"github.com/stretchr/testify/require"
+	"github.com/fsgo/fst"
 )
 
 func TestAppRoot(t *testing.T) {
@@ -35,29 +35,29 @@ func TestAppRoot(t *testing.T) {
 
 func Test_chooseDirWithRootEnv(t *testing.T) {
 	key := "fsenv.k1"
-	require.NoError(t, os.Unsetenv(key))
-	defer require.NoError(t, os.Unsetenv(key))
+	fst.NoError(t, os.Unsetenv(key))
+	defer fst.NoError(t, os.Unsetenv(key))
 
-	require.Equal(t, "v1", chooseDirWithRootEnv("v1", nil, key, "v2"))
+	fst.Equal(t, "v1", chooseDirWithRootEnv("v1", nil, key, "v2"))
 
-	require.NoError(t, os.Setenv(key, "v3"))
-	require.Equal(t, "v3", chooseDirWithRootEnv("", nil, key, "v2"))
+	fst.NoError(t, os.Setenv(key, "v3"))
+	fst.Equal(t, "v3", chooseDirWithRootEnv("", nil, key, "v2"))
 
-	require.NoError(t, os.Unsetenv(key))
-	require.NoError(t, os.Setenv(eKeyRoot, "root"))
-	require.Equal(t, filepath.Join("root", "v2"), chooseDirWithRootEnv("", nil, key, "v2"))
+	fst.NoError(t, os.Unsetenv(key))
+	fst.NoError(t, os.Setenv(eKeyRoot, "root"))
+	fst.Equal(t, filepath.Join("root", "v2"), chooseDirWithRootEnv("", nil, key, "v2"))
 
 	e1 := NewAppRootEnv("v4")
-	require.Equal(t, filepath.Join("v4", "v2"), chooseDirWithRootEnv("", e1, key, "v2"))
+	fst.Equal(t, filepath.Join("v4", "v2"), chooseDirWithRootEnv("", e1, key, "v2"))
 }
 
 func TestAppRootEnv(t *testing.T) {
 	t.Run("init with value", func(t *testing.T) {
 		e1 := NewAppRootEnv("demo")
-		require.Equal(t, "demo", e1.RootDir())
+		fst.Equal(t, "demo", e1.RootDir())
 		t.Run("twice", func(t *testing.T) {
 			defer func() {
-				require.NotNil(t, recover())
+				fst.Nil(t, recover())
 			}()
 			e1.SetRootDir("test")
 		})
@@ -65,12 +65,12 @@ func TestAppRootEnv(t *testing.T) {
 
 	t.Run("init with empty", func(t *testing.T) {
 		e1 := NewAppRootEnv("")
-		require.NoError(t, os.Setenv(eKeyRoot, "test"))
+		fst.NoError(t, os.Setenv(eKeyRoot, "test"))
 		defer func() {
-			require.NoError(t, os.Unsetenv(eKeyRoot))
+			fst.NoError(t, os.Unsetenv(eKeyRoot))
 		}()
-		require.Equal(t, "test", e1.RootDir())
+		fst.Equal(t, "test", e1.RootDir())
 		e1.SetRootDir("v2")
-		require.Equal(t, "v2", e1.RootDir())
+		fst.Equal(t, "v2", e1.RootDir())
 	})
 }

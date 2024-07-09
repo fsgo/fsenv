@@ -9,7 +9,7 @@ import (
 	"path/filepath"
 	"testing"
 
-	"github.com/stretchr/testify/require"
+	"github.com/fsgo/fst"
 )
 
 func TestNewAppEnv(t *testing.T) {
@@ -28,6 +28,6 @@ func TestNewAppEnv(t *testing.T) {
 		IDC:     "test",
 		RunMode: ModeProduct,
 	}
-	require.Equal(t, want, got)
-	require.NotEmpty(t, got.String())
+	fst.Equal(t, want, got)
+	fst.NotEmpty(t, got.String())
 }

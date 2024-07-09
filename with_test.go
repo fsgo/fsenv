@@ -7,7 +7,7 @@ package fsenv_test
 import (
 	"testing"
 
-	"github.com/stretchr/testify/require"
+	"github.com/fsgo/fst"
 
 	"github.com/fsgo/fsenv"
 )
@@ -18,15 +18,15 @@ type testWith struct {
 
 func TestWithAppEnv(t *testing.T) {
 	a1 := &testWith{}
-	require.NotNil(t, a1.AppEnv())
-	require.Same(t, fsenv.Default, a1.AppEnv())
+	fst.NotNil(t, a1.AppEnv())
+	fst.SamePtr(t, fsenv.Default, a1.AppEnv())
 	e1 := fsenv.NewAppEnv(fsenv.Value{})
 	a1.SetAppEnv(e1)
-	require.Same(t, e1, a1.AppEnv())
+	fst.SamePtr(t, e1, a1.AppEnv())
 	t.Run("twice", func(t *testing.T) {
 		defer func() {
 			re := recover()
-			require.NotNil(t, re)
+			fst.NotNil(t, re)
 		}()
 		a1.SetAppEnv(e1)
 	})

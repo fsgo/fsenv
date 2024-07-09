@@ -8,7 +8,7 @@ import (
 	"os"
 	"testing"
 
-	"github.com/stretchr/testify/require"
+	"github.com/fsgo/fst"
 )
 
 func TestParserEnvFile(t *testing.T) {
@@ -74,45 +74,45 @@ func TestParserEnvFile(t *testing.T) {
 				t.Errorf("ParserEnvFile() error = %v, wantErr %v", err, tt.wantErr)
 				return
 			}
-			require.Equal(t, tt.want, got)
+			fst.Equal(t, tt.want, got)
 		})
 	}
 }
 
 func TestLoadEnvFile(t *testing.T) {
 	t.Run("load success", func(t *testing.T) {
-		require.NoError(t, os.Unsetenv("k1"))
+		fst.NoError(t, os.Unsetenv("k1"))
 		defer func() {
-			require.NoError(t, os.Unsetenv("k1"))
+			fst.NoError(t, os.Unsetenv("k1"))
 		}()
-		require.Equal(t, "", os.Getenv("k1"))
-		require.NoError(t, LoadEnvFile("testdata/envfile/b.env"))
-		require.Equal(t, "v1", os.Getenv("k1"))
+		fst.Equal(t, "", os.Getenv("k1"))
+		fst.NoError(t, LoadEnvFile("testdata/envfile/b.env"))
+		fst.Equal(t, "v1", os.Getenv("k1"))
 	})
 
 	t.Run("file not exists", func(t *testing.T) {
-		require.Error(t, LoadEnvFile("testdata/envfile/not_exists.env"))
+		fst.Error(t, LoadEnvFile("testdata/envfile/not_exists.env"))
 	})
 
 	t.Run("bad format", func(t *testing.T) {
-		require.Error(t, LoadEnvFile("testdata/envfile/c_bad.env"))
+		fst.Error(t, LoadEnvFile("testdata/envfile/c_bad.env"))
 	})
 }
 
 func TestMustLoadEnvFile(t *testing.T) {
 	t.Run("load success", func(t *testing.T) {
-		require.NoError(t, os.Unsetenv("k1"))
+		fst.NoError(t, os.Unsetenv("k1"))
 		defer func() {
-			require.NoError(t, os.Unsetenv("k1"))
+			fst.NoError(t, os.Unsetenv("k1"))
 		}()
-		require.Equal(t, "", os.Getenv("k1"))
+		fst.Equal(t, "", os.Getenv("k1"))
 		MustLoadEnvFile("testdata/envfile/b.env")
-		require.Equal(t, "v1", os.Getenv("k1"))
+		fst.Equal(t, "v1", os.Getenv("k1"))
 	})
 
 	t.Run("file not exists", func(t *testing.T) {
 		defer func() {
-			require.NotNil(t, recover())
+			fst.NotNil(t, recover())
 		}()
 		MustLoadEnvFile("testdata/envfile/not_exists.env")
 	})

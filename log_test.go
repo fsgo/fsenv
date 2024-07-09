@@ -8,16 +8,16 @@ import (
 	"os"
 	"testing"
 
-	"github.com/stretchr/testify/require"
+	"github.com/fsgo/fst"
 )
 
 func TestAppLogEnv(t *testing.T) {
 	t.Run("init with value", func(t *testing.T) {
 		e1 := NewAppLogEnv("demo")
-		require.Equal(t, "demo", e1.LogRootDir())
+		fst.Equal(t, "demo", e1.LogRootDir())
 		t.Run("twice", func(t *testing.T) {
 			defer func() {
-				require.NotNil(t, recover())
+				fst.Nil(t, recover())
 			}()
 			e1.SetLogRootDir("test")
 		})
@@ -25,12 +25,12 @@ func TestAppLogEnv(t *testing.T) {
 
 	t.Run("init with empty", func(t *testing.T) {
 		e1 := NewAppLogEnv("")
-		require.NoError(t, os.Setenv(eKeyLog, "test"))
+		fst.NoError(t, os.Setenv(eKeyLog, "test"))
 		defer func() {
-			require.NoError(t, os.Unsetenv(eKeyLog))
+			fst.NoError(t, os.Unsetenv(eKeyLog))
 		}()
-		require.Equal(t, "test", e1.LogRootDir())
+		fst.Equal(t, "test", e1.LogRootDir())
 		e1.SetLogRootDir("v2")
-		require.Equal(t, "v2", e1.LogRootDir())
+		fst.Equal(t, "v2", e1.LogRootDir())
 	})
 }

@@ -8,15 +8,15 @@ import (
 	"os"
 	"testing"
 
-	"github.com/stretchr/testify/require"
+	"github.com/fsgo/fst"
 )
 
 func Test_osEnvDefault(t *testing.T) {
 	key := "fsenv_k1"
-	require.NoError(t, os.Unsetenv(key))
-	defer require.NoError(t, os.Unsetenv(key))
+	fst.NoError(t, os.Unsetenv(key))
+	defer fst.NoError(t, os.Unsetenv(key))
 
-	require.Equal(t, "v1", osEnvDefault(key, "v1"))
-	require.NoError(t, os.Setenv(key, "v2"))
-	require.Equal(t, "v2", osEnvDefault(key, "v1"))
+	fst.Equal(t, "v1", osEnvDefault(key, "v1"))
+	fst.NoError(t, os.Setenv(key, "v2"))
+	fst.Equal(t, "v2", osEnvDefault(key, "v1"))
 }

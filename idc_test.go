@@ -8,16 +8,16 @@ import (
 	"os"
 	"testing"
 
-	"github.com/stretchr/testify/require"
+	"github.com/fsgo/fst"
 )
 
 func TestAppIDCEnv(t *testing.T) {
 	t.Run("init with value", func(t *testing.T) {
 		e1 := NewAppIDCEnv("demo")
-		require.Equal(t, "demo", e1.IDC())
+		fst.Equal(t, "demo", e1.IDC())
 		t.Run("twice", func(t *testing.T) {
 			defer func() {
-				require.NotNil(t, recover())
+				fst.Nil(t, recover())
 			}()
 			e1.SetIDC("test")
 		})
@@ -25,12 +25,12 @@ func TestAppIDCEnv(t *testing.T) {
 
 	t.Run("init with empty", func(t *testing.T) {
 		e1 := NewAppIDCEnv("")
-		require.NoError(t, os.Setenv(eKeyIDC, "test"))
+		fst.NoError(t, os.Setenv(eKeyIDC, "test"))
 		defer func() {
-			require.NoError(t, os.Unsetenv(eKeyLog))
+			fst.NoError(t, os.Unsetenv(eKeyLog))
 		}()
-		require.Equal(t, "test", e1.IDC())
+		fst.Equal(t, "test", e1.IDC())
 		e1.SetIDC("v2")
-		require.Equal(t, "v2", e1.IDC())
+		fst.Equal(t, "v2", e1.IDC())
 	})
 }
