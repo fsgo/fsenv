@@ -4,35 +4,52 @@
 
 package fsenv
 
+import (
+	"os"
+	"path/filepath"
+)
+
 // Default (全局)默认的环境信息
-var Default AppEnvRW
+var Default *Attribute
 
 func init() {
-	initDefault()
+	doInit()
 }
 
-func initDefault() {
-	envRoot := &rootEnv{}
-	Default = &appEnv{
-		AppRootEnv: envRoot,
-		AppDataEnv: &dataEnv{
-			rootEnv: envRoot,
-		},
-		AppLogEnv: &logEnv{
-			rootEnv: envRoot,
-		},
-		AppConfEnv: &confEnv{
-			rootEnv: envRoot,
-		},
-		AppIDCEnv:  &idcEnv{},
-		AppRunMode: &runModeEnv{},
+func doInit() {
+	pwd, err := os.Getwd()
+	if err != nil {
+		panic(err)
 	}
+	Init(filepath.Base(pwd), pwd)
+}
+
+func Init(appName string, rootDir string) {
+	Default = NewAttribute(appName, rootDir)
+}
+
+// MustInitWithAppConfPath 传入应用的主配置文件路径来初始化
+//
+// 假如传入 ./conf/app.toml, 其他路径信息依据此路径自动推断出
+func MustInitWithAppConfPath(appConfPath string) {
+	p, err := filepath.Abs(appConfPath)
+	if err != nil {
+		panic(err)
+	}
+	root := filepath.Dir(filepath.Dir(p))
+	name := filepath.Base(root)
+	Init(name, root)
+}
+
+func SetAppName(name string) {
+	Default.SetAppName(name)
+}
+
+func AppName() string {
+	return Default.AppName()
 }
 
 // RootDir (全局)获取应用根目录
-//
-//	若没有设置值，会尝试从环境变量 fsenv.root 读取值
-//	默认值 go.mod 所在目录 或者 pwd
 func RootDir() string {
 	return Default.RootDir()
 }
@@ -42,43 +59,44 @@ func SetRootDir(dir string) {
 	Default.SetRootDir(dir)
 }
 
-// DataRootDir (全局)设置应用数据根目录
-//
-//	若没有设置值，会尝试从环境变量 fsenv.data 读取值
-//	默认值 RootDir()/data
-func DataRootDir() string {
-	return Default.DataRootDir()
+// DataDir (全局)设置应用数据根目录
+func DataDir() string {
+	return Default.DataDir()
 }
 
-// SetDataRootDir (全局)获取应用数据根目录
-func SetDataRootDir(dir string) {
-	Default.SetDataRootDir(dir)
+// SetDataDir 设置(全局)应用数据根目录
+func SetDataDir(dir string) {
+	Default.SetDataDir(dir)
 }
 
-// LogRootDir (全局)获取应用日志根目录
-//
-//	若没有设置值，会尝试从环境变量 fsenv.root 读取值
-//	默认值 RootDir()/log
-func LogRootDir() string {
-	return Default.LogRootDir()
+// LogDir (全局)获取应用日志根目录
+func LogDir() string {
+	return Default.LogDir()
 }
 
-// SetLogRootDir (全局)设置应用日志根目录
-func SetLogRootDir(dir string) {
-	Default.SetLogRootDir(dir)
+// SetLogDir (全局)设置应用日志根目录
+func SetLogDir(dir string) {
+	Default.SetLogDir(dir)
 }
 
-// ConfRootDir (全局)获取应用配置根目录
-//
-//	若没有设置值，会尝试从环境变量 fsenv.conf 读取值
-//	默认值 RootDir()/conf
-func ConfRootDir() string {
-	return Default.ConfRootDir()
+// ConfDir (全局)获取应用配置根目录
+func ConfDir() string {
+	return Default.ConfDir()
 }
 
-// SetConfRootDir (全局)设置应用配置根目录
-func SetConfRootDir(dir string) {
-	Default.SetConfRootDir(dir)
+// SetConfDir (全局)设置应用配置根目录
+func SetConfDir(dir string) {
+	Default.SetConfDir(dir)
+}
+
+// TempDir (全局)获取应用临时文件根目录
+func TempDir() string {
+	return Default.TempDir()
+}
+
+// SetTempDir (全局)设置应用临时文件根目录
+func SetTempDir(dir string) {
+	Default.SetTempDir(dir)
 }
 
 // SetIDC (全局) 设置idc
@@ -87,22 +105,28 @@ func SetIDC(idc string) {
 }
 
 // IDC (全局)获取应用的 IDC
-//
-//	若没有设置值，会尝试从环境变量 fsenv.idc 读取值
-//	默认值为 test
 func IDC() string {
 	return Default.IDC()
 }
 
 // RunMode (全局)获取应用的运行模式
-//
-//	若没有设置值，会尝试从环境变量 fsenv.mode 读取值
-//	默认值为 product
 func RunMode() Mode {
 	return Default.RunMode()
 }
 
-// SetRunMode (全局)设置应用的运行模式
+// SetRunMode (全局)设置应用的运行模式，是并发安全的
 func SetRunMode(mode Mode) {
 	Default.SetRunMode(mode)
+}
+
+func SetAttr(key any, value any) {
+	Default.SetAttr(key, value)
+}
+
+func Attr(key any) (any, bool) {
+	return Default.Attr(key)
+}
+
+func AttrRange(fn func(key any, value any) bool) {
+	Default.AttrRange(fn)
 }

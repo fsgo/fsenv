@@ -16,24 +16,24 @@ func ExampleRootDir() {
 	fmt.Println("root dir=", dir)
 }
 
-func ExampleConfRootDir() {
-	dir := fsenv.ConfRootDir()
+func ExampleConfDir() {
+	dir := fsenv.ConfDir()
 	fmt.Println("conf root dir=", dir)
 	// 输出 {xxx}/conf
 
-	dbUserConfPath := filepath.Join(fsenv.ConfRootDir(), "db", "db_user.toml")
+	dbUserConfPath := filepath.Join(fsenv.ConfDir(), "db", "db_user.toml")
 	fmt.Println("db user confPath=", dbUserConfPath)
 	// 输出 {xxx}/conf/db/db_user.toml
 }
 
-func ExampleDataRootDir() {
-	dir := fsenv.DataRootDir()
+func ExampleDataDir() {
+	dir := fsenv.DataDir()
 	fmt.Println("data root dir=", dir)
 	// 输出 {xxx}/data
 }
 
-func ExampleLogRootDir() {
-	dir := fsenv.LogRootDir()
+func ExampleLogDir() {
+	dir := fsenv.LogDir()
 	fmt.Println("log root dir=", dir)
 	// 输出 {xxx}/log
 

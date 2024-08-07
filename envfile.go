@@ -11,8 +11,8 @@ import (
 )
 
 // LoadEnvFile 加载一个 env 文件到 os.env 里
-func LoadEnvFile(fn string) error {
-	vs, err := ParserEnvFile(fn)
+func LoadEnvFile(fileName string) error {
+	vs, err := ParserEnvFile(fileName)
 	if err != nil {
 		return err
 	}
@@ -26,15 +26,15 @@ func LoadEnvFile(fn string) error {
 
 // MustLoadEnvFile 加载一个 env 文件到 os.env 里。
 // 若有异常，会 panic
-func MustLoadEnvFile(fn string) {
-	if err := LoadEnvFile(fn); err != nil {
-		panic("LoadEnvFile(" + fn + ") failed:" + err.Error())
+func MustLoadEnvFile(fileName string) {
+	if err := LoadEnvFile(fileName); err != nil {
+		panic("LoadEnvFile(" + fileName + ") failed:" + err.Error())
 	}
 }
 
 // ParserEnvFile 解析一个 env 文件
-func ParserEnvFile(fn string) (map[string]string, error) {
-	content, err := os.ReadFile(fn)
+func ParserEnvFile(fileName string) (map[string]string, error) {
+	content, err := os.ReadFile(fileName)
 	if err != nil {
 		return nil, err
 	}

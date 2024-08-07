@@ -1,65 +1,40 @@
-// Copyright(C) 2021 github.com/fsgo  All Rights Reserved.
-// Author: fsgo
-// Date: 2021/7/11
+// Copyright(C) 2020 github.com/fsgo  All Rights Reserved.
+// Author: hidu
+// Date: 2024/08/07
 
 package fsenv
 
-import (
-	"os"
-	"sync/atomic"
-)
+import "fmt"
 
 // Mode 运行模式
-type Mode string
+type Mode int32
 
 const (
-	// ModeDebug 运行模式-调试
-	ModeDebug Mode = "debug"
-
 	// ModeProduct 运行模式-线上发布
-	ModeProduct Mode = "product"
+	ModeProduct Mode = iota
+
+	// ModeDebug 运行模式-调试
+	ModeDebug
 )
 
-// AppRunMode 机房信息
-type AppRunMode interface {
-	HasRunMode
-	CanSetRunMode
-}
-
-// HasRunMode 可以获取 runMode
-type HasRunMode interface {
-	RunMode() Mode
-}
-
-// CanSetRunMode 允许设置 runMode
-type CanSetRunMode interface {
-	SetRunMode(mode Mode)
-}
-
-// NewAppRunModeEnv 创建新的配置环境信息
-func NewAppRunModeEnv(mode Mode) AppRunMode {
-	ae := &runModeEnv{}
-	ae.SetRunMode(mode)
-	return ae
-}
-
-type runModeEnv struct {
-	mode atomic.Value
-}
-
-func (c *runModeEnv) RunMode() Mode {
-	vs, _ := c.mode.Load().(Mode)
-	if len(vs) > 0 {
-		return vs
+func (m Mode) String() string {
+	switch m {
+	case ModeProduct:
+		return "product"
+	case ModeDebug:
+		return "debug"
+	default:
+		return fmt.Sprintf("unknown(%d)", m)
 	}
-	if val := os.Getenv(eKeyMode); len(val) > 0 {
-		return Mode(val)
+}
+
+func modeFromEnv(def Mode) Mode {
+	switch osEnvDefault(eKeyMode, "") {
+	case "product":
+		return ModeProduct
+	case "debug":
+		return ModeDebug
+	default:
+		return def
 	}
-	return ModeProduct
 }
-
-func (c *runModeEnv) SetRunMode(mode Mode) {
-	c.mode.Store(mode)
-}
-
-var _ AppRunMode = (*runModeEnv)(nil)

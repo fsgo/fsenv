@@ -6,6 +6,7 @@ package fsenv
 
 import (
 	"os"
+	"strings"
 )
 
 const (
@@ -13,6 +14,7 @@ const (
 	eKeyConf = "FSENV_CONF"
 	eKeyRoot = "FSENV_ROOT"
 	eKeyData = "FSENV_DATA"
+	eKeyTemp = "FSENV_TEMP"
 	eKeyLog  = "FSENV_LOG"
 	eKeyMode = "FSENV_MODE"
 )
@@ -23,4 +25,13 @@ func osEnvDefault(key string, def string) string {
 		return def
 	}
 	return val
+}
+
+// parserDirName 解析目录名称，若以 |abs 结尾则表示是绝对路径
+func parserDirName(path string) (string, bool) {
+	before, after, found := strings.Cut(path, "|")
+	if found && after == "abs" {
+		return before, true
+	}
+	return path, false
 }

@@ -1,0 +1,28 @@
+name: Go
+
+on:
+  push:
+    branches: [ master ]
+  pull_request:
+    branches: [ master ]
+
+jobs:
+
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      # https://github.com/actions/checkout/tree/v3
+      - uses: actions/checkout@v3
+
+      - name: Set up Go
+        # https://github.com/actions/setup-go/tree/v3s
+        uses: actions/setup-go@v3
+        with:
+          go-version-file: 'go.mod'
+          check-latest: true
+
+      - name: Test
+        run: go test -v -race ./...
+
+#    - name: Go coverage report
+#      uses: ncruces/go-coverage-report@v0
